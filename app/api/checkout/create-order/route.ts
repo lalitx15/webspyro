@@ -50,22 +50,38 @@ export async function POST(request: NextRequest) {
 
     if (validated.coupon_code) {
       const codeUpper = validated.coupon_code.trim().toUpperCase();
-
-      const { data: dbCoupon } = await supabase
+      const { data: dbCoupon, error: couponLookupError } = await supabase
         .from("coupons")
         .select("*")
         .eq("code", codeUpper)
-        .eq("is_active", true)
         .maybeSingle();
 
-      if (dbCoupon && plan.price >= dbCoupon.min_order_amount) {
+      if (couponLookupError) {
+        console.error("Coupon lookup failed:", couponLookupError);
+        return NextResponse.json({ error: "Unable to validate this coupon right now." }, { status: 500 });
+      }
+
+      if (dbCoupon) {
+        if (!dbCoupon.is_active) {
+          return NextResponse.json({ error: "This coupon is not active." }, { status: 400 });
+        }
+        if (dbCoupon.valid_until && new Date(dbCoupon.valid_until).getTime() < Date.now()) {
+          return NextResponse.json({ error: "This coupon has expired." }, { status: 400 });
+        }
+        if (dbCoupon.max_uses && dbCoupon.current_uses >= dbCoupon.max_uses) {
+          return NextResponse.json({ error: "This coupon usage limit has been reached." }, { status: 400 });
+        }
+        if (plan.price < dbCoupon.min_order_amount) {
+          return NextResponse.json({ error: "The selected plan does not meet this coupon's minimum order amount." }, { status: 400 });
+        }
+
         couponDetails = {
           discount_type: dbCoupon.discount_type as "percentage" | "fixed",
           discount_value: dbCoupon.discount_value,
         };
         appliedCouponCode = dbCoupon.code;
       } else {
-        // Built-in promo check
+        // Only known, built-in promotions may be used without a database record.
         if (codeUpper === "WELCOME10") {
           couponDetails = { discount_type: "percentage", discount_value: 10 };
           appliedCouponCode = "WELCOME10";
@@ -75,16 +91,23 @@ export async function POST(request: NextRequest) {
         } else if (codeUpper === "LAUNCH30" && plan.price >= 14000) {
           couponDetails = { discount_type: "percentage", discount_value: 30 };
           appliedCouponCode = "LAUNCH30";
-        } else if (codeUpper === "SUPER1000") {
+        } else if (codeUpper === "SUPER1000" && plan.price >= 8000) {
           couponDetails = { discount_type: "fixed", discount_value: 1000 };
           appliedCouponCode = "SUPER1000";
+        } else {
+          return NextResponse.json({ error: "Invalid or ineligible coupon code." }, { status: 400 });
         }
       }
     }
-
     // 3. Compute Financials
     const financials = calculateOrderFinancials(plan.price, couponDetails, 18);
     const orderNumber = `WSP-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    if (!keyId) {
+      console.error("Razorpay checkout key ID is not configured");
+      return NextResponse.json({ error: "Payment checkout is not configured. Please contact support." }, { status: 503 });
+    }
 
     // 4. Create Razorpay order
     // Never fabricate a gateway order ID: only real Razorpay orders may proceed.
@@ -155,11 +178,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
-    if (!keyId) {
-      console.error("Razorpay checkout key ID is not configured");
-      return NextResponse.json({ error: "Payment checkout is not configured. Please contact support." }, { status: 503 });
-    }
 
     return NextResponse.json({
       success: true,
