@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input, Textarea } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { defaultPlans, PlanItem } from "@/lib/home-data";
-import { calculateOrderFinancials } from "@/lib/razorpay";
+import { calculateOrderFinancials } from "@/lib/order-financials";
 import { WhatsAppIcon } from "@/components/ui/whatsapp-icon";
 
 interface RazorpayInstance {
@@ -196,9 +196,7 @@ function CheckoutContent() {
           currency: currency || "INR",
           name: "Webspyra Agency",
           description: `${activePlan.name} Website Package`,
-          order_id: razorpay_order_id.startsWith("order_test_") || razorpay_order_id.startsWith("order_mock_")
-            ? undefined
-            : razorpay_order_id,
+          order_id: razorpay_order_id,
           prefill: {
             name: fullName.trim(),
             email: email.trim(),
@@ -223,7 +221,7 @@ function CheckoutContent() {
               order_number,
               response.razorpay_order_id || razorpay_order_id,
               response.razorpay_payment_id,
-              response.razorpay_signature || "mock_verified_signature"
+              response.razorpay_signature || ""
             );
           },
         };
@@ -235,52 +233,12 @@ function CheckoutContent() {
         });
         rzp.open();
       } else {
-        // Fallback simulated payment
-        await handleVerifyPayment(
-          order_number,
-          razorpay_order_id,
-          `pay_sim_${Date.now()}`,
-          "mock_verified_signature"
-        );
+        throw new Error("Payment gateway is still loading. Please wait a moment and try again.");
       }
     } catch (err: unknown) {
       setIsProcessingPayment(false);
       const msg = err instanceof Error ? err.message : "Payment initialization failed";
       error("Checkout Error", msg);
-    }
-  };
-
-  // Simulate Instant Test Payment for local / sandbox verification
-  const handleSimulateTestPayment = async () => {
-    setIsProcessingPayment(true);
-    try {
-      const res = await fetch("/api/checkout/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          plan_id: activePlan.id,
-          customer_name: fullName.trim() || "Test Client",
-          customer_email: email.trim() || "client@test.com",
-          customer_phone: phone.trim() || "+91 9876543210",
-          company: company.trim() || "Webspyra Demo Corp",
-          coupon_code: appliedCoupon?.code || undefined,
-          notes: requirements.trim() || "Test Order from sandbox checkout",
-        }),
-      });
-
-      const orderData = await res.json();
-      if (!res.ok) throw new Error(orderData.error);
-
-      await handleVerifyPayment(
-        orderData.order_number,
-        orderData.razorpay_order_id,
-        `pay_test_${Date.now()}`,
-        "mock_verified_signature"
-      );
-    } catch (err: unknown) {
-      setIsProcessingPayment(false);
-      const msg = err instanceof Error ? err.message : "Test checkout failed";
-      error("Simulation Error", msg);
     }
   };
 
@@ -761,13 +719,7 @@ function CheckoutContent() {
 
                     {/* Developer / Sandbox Simulation Button */}
                     <div className="pt-1 text-center">
-                      <button
-                        type="button"
-                        onClick={handleSimulateTestPayment}
-                        className="text-[11px] text-slate-400 hover:text-accent underline font-medium cursor-pointer"
-                      >
-                        ⚡ Simulate Instant Test Payment (Dev/Demo Mode)
-                      </button>
+                      
                     </div>
                   </div>
 

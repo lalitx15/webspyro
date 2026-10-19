@@ -32,15 +32,33 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient();
 
     // 2. Locate order in database
-    const { data: order } = await supabase
+    const { data: order, error: orderLookupError } = await supabase
       .from("orders")
       .select("*")
       .eq("order_number", validated.order_number)
       .maybeSingle();
 
-    if (order) {
+    if (orderLookupError) {
+      console.error("Order lookup failed during payment verification:", orderLookupError);
+      return NextResponse.json({ error: "Unable to verify this order right now" }, { status: 500 });
+    }
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+    if (order.razorpay_order_id !== validated.razorpay_order_id) {
+      return NextResponse.json({ error: "Payment order does not match this checkout" }, { status: 400 });
+    }
+    if (order.payment_status === "paid") {
+      return NextResponse.json({
+        success: true,
+        order_number: validated.order_number,
+        payment_id: order.razorpay_payment_id,
+        message: "Payment was already verified.",
+      });
+    }
+    {
       // 3. Update Order status to paid
-      await supabase
+      const { error: paymentUpdateError } = await supabase
         .from("orders")
         .update({
           payment_status: "paid",
@@ -49,6 +67,11 @@ export async function POST(request: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", order.id);
+
+      if (paymentUpdateError) {
+        console.error("Failed to persist verified payment:", paymentUpdateError);
+        return NextResponse.json({ error: "Payment was verified but order status could not be updated. Please contact support." }, { status: 500 });
+      }
 
       // 4. Log timeline event
       await supabase.from("order_timeline").insert({

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { NoZoom } from "@/components/ui/no-zoom";
 import { ServiceWorkerRegister } from "@/components/ui/service-worker-register";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ToastProvider } from "@/components/ui/toast";
@@ -25,9 +24,6 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  minimumScale: 1,
-  userScalable: false,
   viewportFit: "cover",
   themeColor: "#EEF2F7",
 };
@@ -65,7 +61,6 @@ export default function RootLayout({
       <body className="min-h-[100dvh] font-sans antialiased bg-base text-textPrimary selection:bg-accent/20 selection:text-accent">
         <AnalyticsProvider />
         <MorphingCursor />
-        <NoZoom />
         <ServiceWorkerRegister />
         <AuthProvider>
           <ToastProvider>

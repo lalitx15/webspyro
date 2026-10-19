@@ -50,22 +50,38 @@ export async function POST(request: NextRequest) {
 
     if (validated.coupon_code) {
       const codeUpper = validated.coupon_code.trim().toUpperCase();
-
-      const { data: dbCoupon } = await supabase
+      const { data: dbCoupon, error: couponLookupError } = await supabase
         .from("coupons")
         .select("*")
         .eq("code", codeUpper)
-        .eq("is_active", true)
         .maybeSingle();
 
-      if (dbCoupon && plan.price >= dbCoupon.min_order_amount) {
+      if (couponLookupError) {
+        console.error("Coupon lookup failed:", couponLookupError);
+        return NextResponse.json({ error: "Unable to validate this coupon right now." }, { status: 500 });
+      }
+
+      if (dbCoupon) {
+        if (!dbCoupon.is_active) {
+          return NextResponse.json({ error: "This coupon is not active." }, { status: 400 });
+        }
+        if (dbCoupon.valid_until && new Date(dbCoupon.valid_until).getTime() < Date.now()) {
+          return NextResponse.json({ error: "This coupon has expired." }, { status: 400 });
+        }
+        if (dbCoupon.max_uses && dbCoupon.current_uses >= dbCoupon.max_uses) {
+          return NextResponse.json({ error: "This coupon usage limit has been reached." }, { status: 400 });
+        }
+        if (plan.price < dbCoupon.min_order_amount) {
+          return NextResponse.json({ error: "The selected plan does not meet this coupon's minimum order amount." }, { status: 400 });
+        }
+
         couponDetails = {
           discount_type: dbCoupon.discount_type as "percentage" | "fixed",
           discount_value: dbCoupon.discount_value,
         };
         appliedCouponCode = dbCoupon.code;
       } else {
-        // Built-in promo check
+        // Only known, built-in promotions may be used without a database record.
         if (codeUpper === "WELCOME10") {
           couponDetails = { discount_type: "percentage", discount_value: 10 };
           appliedCouponCode = "WELCOME10";
@@ -75,24 +91,31 @@ export async function POST(request: NextRequest) {
         } else if (codeUpper === "LAUNCH30" && plan.price >= 14000) {
           couponDetails = { discount_type: "percentage", discount_value: 30 };
           appliedCouponCode = "LAUNCH30";
-        } else if (codeUpper === "SUPER1000") {
+        } else if (codeUpper === "SUPER1000" && plan.price >= 8000) {
           couponDetails = { discount_type: "fixed", discount_value: 1000 };
           appliedCouponCode = "SUPER1000";
+        } else {
+          return NextResponse.json({ error: "Invalid or ineligible coupon code." }, { status: 400 });
         }
       }
     }
-
     // 3. Compute Financials
     const financials = calculateOrderFinancials(plan.price, couponDetails, 18);
     const orderNumber = `WSP-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    // 4. Create Razorpay order
-    const razorpay = getRazorpayClient();
-    let razorpayOrderId = `order_mock_${Date.now()}`;
+    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    if (!keyId) {
+      console.error("Razorpay checkout key ID is not configured");
+      return NextResponse.json({ error: "Payment checkout is not configured. Please contact support." }, { status: 503 });
+    }
 
+    // 4. Create Razorpay order
+    // Never fabricate a gateway order ID: only real Razorpay orders may proceed.
+    let razorpayOrderId: string;
     try {
+      const razorpay = getRazorpayClient();
       const rzpOrder = await razorpay.orders.create({
-        amount: Math.round(financials.total_amount * 100), // amount in paise
+        amount: Math.round(financials.total_amount * 100),
         currency: "INR",
         receipt: orderNumber,
         notes: {
@@ -102,14 +125,16 @@ export async function POST(request: NextRequest) {
           customer_email: validated.customer_email,
         },
       });
-
-      if (rzpOrder?.id) {
-        razorpayOrderId = rzpOrder.id;
+      if (!rzpOrder?.id) {
+        return NextResponse.json({ error: "Payment provider did not create an order" }, { status: 502 });
       }
+      razorpayOrderId = rzpOrder.id;
     } catch (rzpErr) {
-      console.warn("Razorpay API order creation warning, using simulated order ID:", rzpErr);
-      // In sandbox/placeholder keys, fallback to deterministic order ID
-      razorpayOrderId = `order_test_${Date.now()}`;
+      console.error("Razorpay order creation failed:", rzpErr);
+      return NextResponse.json(
+        { error: "Unable to start payment right now. Please try again later." },
+        { status: 502 }
+      );
     }
 
     // 5. Insert order into database
@@ -134,9 +159,12 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (orderInsertErr) {
+    if (orderInsertErr || !orderRecord) {
       console.error("Order insertion error", orderInsertErr);
-      // Even if database has local constraint issue, return the order details so flow succeeds
+      return NextResponse.json(
+        { error: "Unable to save your order. Please try again; you have not been charged." },
+        { status: 500 }
+      );
     }
 
     // 6. Insert Order Timeline record
@@ -150,14 +178,10 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const keyId =
-      process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
-      process.env.RAZORPAY_KEY_ID ||
-      "rzp_test_placeholder";
 
     return NextResponse.json({
       success: true,
-      order_id: orderRecord?.id || `ord_${Date.now()}`,
+      order_id: orderRecord.id,
       order_number: orderNumber,
       razorpay_order_id: razorpayOrderId,
       amount: Math.round(financials.total_amount * 100),
