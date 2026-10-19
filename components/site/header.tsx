@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -124,18 +125,29 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
       >
         <div className="max-w-7xl mx-auto h-full px-3 sm:px-6 flex items-center justify-between py-0 sm:py-0.5">
           
-          {/* 1. Brand Logo */}
-          <Link href="/" className="flex items-center gap-2 group select-none shrink-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-black font-extrabold shadow-[0_0_12px_rgba(6,182,212,0.4)] group-hover:scale-105 transition-transform">
-              <Sparkles className="w-3.5 h-3.5 text-black" />
+          {/* 1. Brand Logo: Mobile (Phone) Text-Only vs Desktop Dragon Emblem + Typography */}
+          <Link href="/" className="flex items-center group select-none shrink-0 py-0.5">
+            {/* Mobile (phone): Text-only Logo */}
+            <div className="block md:hidden">
+              <Image
+                src="/images/logo-mobile.png"
+                alt={settings.site_name || "WebSpyra"}
+                width={140}
+                height={87}
+                priority
+                className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+              />
             </div>
-            <div>
-              <span className="font-heading text-base sm:text-lg font-extrabold tracking-tight text-white group-hover:text-cyan-400 transition-colors leading-none">
-                {settings.site_name || "WEBSPYRA"}
-              </span>
-              <span className="hidden sm:block text-[8px] font-bold text-neutral-300 uppercase tracking-widest leading-none mt-0.5">
-                Web Development Agency
-              </span>
+            {/* Desktop / Tablet: Dragon Emblem + Web Spyra Typography */}
+            <div className="hidden md:block">
+              <Image
+                src="/images/logo-desktop.png"
+                alt={settings.site_name || "WebSpyra"}
+                width={200}
+                height={86}
+                priority
+                className="h-8 lg:h-9 w-auto object-contain transition-transform group-hover:scale-105"
+              />
             </div>
           </Link>
 
@@ -244,14 +256,15 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
               <Link
                 href="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3"
+                className="flex items-center"
               >
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-black font-bold">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <span className="font-heading text-xl font-bold text-white">
-                  {settings.site_name || "WEBSPYRA"}
-                </span>
+                <Image
+                  src="/images/logo-mobile.png"
+                  alt={settings.site_name || "WebSpyra"}
+                  width={140}
+                  height={87}
+                  className="h-8 w-auto object-contain"
+                />
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
