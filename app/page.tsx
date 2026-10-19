@@ -48,36 +48,38 @@ function HomePageContent() {
   const { openQuoteModal } = useQuoteModal();
 
   return (
-    <div className="relative w-full">
-      {/* 1. Hero Section */}
-      <div className="relative z-20 w-full shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+    <div className="relative w-full overflow-x-hidden">
+      {/* 1. Hero Section ("A better website. More trust. More customers.") - Black on mobile & desktop */}
+      <div className="relative z-20 w-full bg-black shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
         <HeroSection onOpenQuote={() => openQuoteModal()} />
       </div>
 
-      {/* Cinematic Scroll Reveal Animation between Hero and Features */}
-      <CinematicFooter onOpenQuote={() => openQuoteModal()} />
+      {/* Cinematic Scroll Reveal Animation between Hero and Features (Desktop only) */}
+      <div className="hidden md:block">
+        <CinematicFooter onOpenQuote={() => openQuoteModal()} />
+      </div>
 
-      {/* 2. Website Features */}
-      <div className="relative z-20 w-full shadow-[0_-20px_50px_rgba(0,0,0,0.15)]">
+      {/* 2. Website Features ("Everything your business needs to succeed online.") - White */}
+      <div className="relative z-20 w-full shadow-[0_-20px_50px_rgba(0,0,0,0.15)] bg-white">
         <FeaturesSection />
       </div>
 
-      {/* 3. Pricing Plans (Business & E-Commerce) */}
+      {/* 3. Pricing Plans ("Affordable website plans crafted for rapid growth.") - Black */}
       <PricingSection onOpenQuote={() => openQuoteModal()} />
 
-      {/* 4. With vs Without Website Comparison */}
+      {/* 4. With vs Without Website Comparison ("Why your business cannot afford...") - White */}
       <WithWithoutSection />
 
       {/* 5. Latest Work / Portfolio with Live Preview Modal */}
       <PortfolioSection />
 
-      {/* 6. How It Works (4 Animated Steps) */}
+      {/* 6. How It Works ("From concept to live website in 4 simple steps.") - White */}
       <HowItWorksSection onOpenQuote={() => openQuoteModal()} />
 
-      {/* 7. Client Testimonials & Review System */}
+      {/* 7. Client Testimonials & Review System ("Trusted by 500+ ambitious businesses...") - White */}
       <TestimonialsSection />
 
-      {/* 8. Frequently Asked Questions Accordion */}
+      {/* 8. Frequently Asked Questions Accordion ("Clear answers before we build...") - White */}
       <FaqSection />
 
       {/* 9. Contact / Lead Enquiry Form (#enquire) */}
@@ -88,6 +90,11 @@ function HomePageContent() {
 
       {/* 11. Final CTA Banner */}
       <CtaSection onOpenQuote={() => openQuoteModal()} />
+
+      {/* 8 for mobile: Ready to build something extraordinary? - White background on mobile */}
+      <div className="block md:hidden">
+        <CinematicFooter onOpenQuote={() => openQuoteModal()} />
+      </div>
     </div>
   );
 }

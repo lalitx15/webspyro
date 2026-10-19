@@ -20,14 +20,20 @@ export function SectionReveal({
   className,
   ...props
 }: SectionRevealProps) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: yOffset }}
+      initial={isMobile ? { opacity: 1, y: 0 } : { opacity: 0, y: yOffset }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin: isMobile ? "0px" : "-80px" }}
       transition={{
-        duration,
-        delay,
+        duration: isMobile ? 0.3 : duration,
+        delay: isMobile ? 0 : delay,
         ease: [0.25, 0.1, 0.25, 1],
       }}
       className={className}
@@ -50,12 +56,18 @@ export function StaggerContainer({
   className,
   ...props
 }: StaggerContainerProps) {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: staggerDelay,
+        staggerChildren: isMobile ? 0.04 : staggerDelay,
       },
     },
   };
@@ -63,9 +75,9 @@ export function StaggerContainer({
   return (
     <motion.div
       variants={containerVariants}
-      initial="hidden"
+      initial={isMobile ? "show" : "hidden"}
       whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin: isMobile ? "0px" : "-80px" }}
       className={className}
       {...props}
     >

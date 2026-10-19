@@ -125,6 +125,19 @@ const STYLES = `
   background-clip: text;
   filter: drop-shadow(0px 0px 25px rgba(6, 182, 212, 0.3));
 }
+
+@media (max-width: 767px) {
+  .cinematic-footer-wrapper {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .footer-giant-bg-text {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.06) 0%, transparent 60%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+}
 `;
 
 // -------------------------------------------------------------------------
@@ -310,12 +323,12 @@ export function CinematicFooter({
         ref={wrapperRef}
         className={cn("relative min-h-[85vh] md:h-screen w-full select-none overflow-hidden md:overflow-visible", className)}
       >
-        {/* The footer stays fixed on desktop, and relative on mobile */}
-        <footer className="relative md:fixed md:bottom-0 md:left-0 flex min-h-[85vh] md:h-screen w-full flex-col justify-between overflow-hidden bg-black/[0.98] text-white cinematic-footer-wrapper">
+        {/* The footer stays fixed on desktop, and relative on mobile with white background */}
+        <footer className="relative md:fixed md:bottom-0 md:left-0 flex min-h-[85vh] md:h-screen w-full flex-col justify-between overflow-hidden bg-white md:bg-black/[0.98] text-black md:text-white cinematic-footer-wrapper border-y border-slate-200 md:border-none">
           
-          {/* Ambient Light & Grid Background */}
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[90px] pointer-events-none z-0" />
-          <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
+          {/* Ambient Light & Grid Background (Desktop only) */}
+          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[90px] pointer-events-none z-0 hidden md:block" />
+          <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none hidden md:block" />
 
           {/* Giant background text */}
           <div
@@ -326,8 +339,8 @@ export function CinematicFooter({
           </div>
 
           {/* 1. Diagonal Sleek Marquee (Top of section) */}
-          <div className="absolute top-10 sm:top-14 left-0 w-full overflow-hidden border-y border-white/15 bg-black/80 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
-            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-extrabold tracking-[0.3em] text-neutral-200 uppercase">
+          <div className="absolute top-10 sm:top-14 left-0 w-full overflow-hidden border-y border-slate-200 md:border-white/15 bg-slate-50 md:bg-black/80 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-sm md:shadow-2xl">
+            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-extrabold tracking-[0.3em] text-slate-800 md:text-neutral-200 uppercase">
               <MarqueeItem />
               <MarqueeItem />
             </div>
@@ -337,7 +350,7 @@ export function CinematicFooter({
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 sm:mt-20 w-full max-w-5xl mx-auto text-center">
             <h2
               ref={headingRef}
-              className="text-3xl sm:text-6xl md:text-8xl font-black footer-text-glow tracking-tighter mb-6 sm:mb-12 text-center max-w-4xl text-white"
+              className="text-3xl sm:text-6xl md:text-8xl font-black text-black md:text-white md:footer-text-glow tracking-tighter mb-6 sm:mb-12 text-center max-w-4xl"
             >
               {headingText}
             </h2>
@@ -349,7 +362,7 @@ export function CinematicFooter({
                 <MagneticButton
                   as="button"
                   onClick={onOpenQuote}
-                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group bg-gradient-to-r from-cyan-500/25 via-blue-500/25 to-cyan-500/25 border-2 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.5),inset_0_0_15px_rgba(6,182,212,0.25)] hover:shadow-[0_0_40px_rgba(6,182,212,0.85),inset_0_0_20px_rgba(6,182,212,0.4)] transition-all drop-shadow-[0_0_12px_rgba(6,182,212,0.7)]"
+                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group bg-slate-950 md:bg-gradient-to-r md:from-cyan-500/25 md:via-blue-500/25 md:to-cyan-500/25 border-2 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.5),inset_0_0_15px_rgba(6,182,212,0.25)] hover:shadow-[0_0_40px_rgba(6,182,212,0.85),inset_0_0_20px_rgba(6,182,212,0.4)] transition-all drop-shadow-[0_0_12px_rgba(6,182,212,0.7)]"
                 >
                   <span className="w-2.5 h-2.5 rounded-full bg-cyan-300 animate-ping mr-1 shadow-[0_0_12px_#22d3ee]" />
                   <span className="!text-white text-white tracking-wide">Get Free Website Quote</span>
@@ -361,7 +374,7 @@ export function CinematicFooter({
                 <MagneticButton
                   as="button"
                   onClick={scrollToServices}
-                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group border-2 border-cyan-400/50 hover:border-cyan-300 bg-white/[0.08] hover:bg-cyan-950/40 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] transition-all"
+                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group border-2 border-cyan-500/60 md:border-cyan-400/50 hover:border-cyan-400 bg-slate-900 md:bg-white/[0.08] hover:bg-slate-800 md:hover:bg-cyan-950/40 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] transition-all"
                 >
                   <span className="!text-white text-white tracking-wide">Explore Features</span>
                   <svg className="w-4 h-4 text-cyan-300 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,21 +388,21 @@ export function CinematicFooter({
                 <MagneticButton
                   as="a"
                   href="#pricing"
-                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-500/60 md:border-cyan-400/50 hover:border-cyan-400 bg-slate-900 md:bg-black/60 hover:bg-slate-800 md:hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
                 >
                   Pricing Plans
                 </MagneticButton>
                 <MagneticButton
                   as="a"
                   href="#portfolio"
-                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-500/60 md:border-cyan-400/50 hover:border-cyan-400 bg-slate-900 md:bg-black/60 hover:bg-slate-800 md:hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
                 >
                   Portfolio Works
                 </MagneticButton>
                 <MagneticButton
                   as="a"
                   href="#faq"
-                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-500/60 md:border-cyan-400/50 hover:border-cyan-400 bg-slate-900 md:bg-black/60 hover:bg-slate-800 md:hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
                 >
                   FAQ & Support
                 </MagneticButton>
@@ -401,12 +414,12 @@ export function CinematicFooter({
           <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
             
             {/* Copyright */}
-            <div className="text-neutral-300 text-[10px] md:text-xs font-bold tracking-widest uppercase order-2 md:order-1">
+            <div className="text-slate-600 md:text-neutral-300 text-[10px] md:text-xs font-bold tracking-widest uppercase order-2 md:order-1">
               © 2026 Webspyra. All rights reserved.
             </div>
 
             {/* "Made with Passion" Badge */}
-            <div className="footer-glass-pill px-6 py-2.5 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-white/20 bg-white/10">
+            <div className="footer-glass-pill px-6 py-2.5 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-slate-300 md:border-white/20 bg-slate-900 md:bg-white/10">
               <span className="text-neutral-200 text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
               <span className="animate-footer-heartbeat text-sm md:text-base text-rose-500">❤</span>
               <span className="text-neutral-200 text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
@@ -417,7 +430,7 @@ export function CinematicFooter({
             <MagneticButton
               as="button"
               onClick={scrollToTop}
-              className="w-11 h-11 rounded-full footer-glass-pill flex items-center justify-center text-white hover:text-cyan-300 group order-3 border-white/20 bg-white/10"
+              className="w-11 h-11 rounded-full footer-glass-pill flex items-center justify-center text-white hover:text-cyan-300 group order-3 border-slate-300 md:border-white/20 bg-slate-900 md:bg-white/10"
             >
               <svg className="w-4 h-4 transform group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />

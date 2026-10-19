@@ -43,12 +43,12 @@ export function HeroSection({ onOpenQuote }: HeroSectionProps) {
       baseOpacity={0.25}
       color="#06b6d4"
       pingArea={[0.15, 0.2, 0.85, 0.8]}
-      className="relative w-full min-h-[92vh] lg:min-h-screen bg-black/[0.98] overflow-hidden flex flex-col justify-center items-center border-b border-neutral-900"
+      className="relative w-full min-h-[100dvh] lg:min-h-screen bg-black md:bg-black/[0.98] overflow-hidden flex flex-col justify-center items-center border-b border-neutral-900"
     >
-      {/* Soft wash behind copy to keep it ultra-legible while expanding sonar rings pass underneath */}
+      {/* Soft wash behind copy on desktop */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(0,0,0,0.85)_0%,transparent_100%)]"
+        className="pointer-events-none absolute inset-0 -z-10 hidden md:block bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(0,0,0,0.85)_0%,transparent_100%)]"
       />
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-5 sm:px-8 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-28 flex flex-col items-center text-center">

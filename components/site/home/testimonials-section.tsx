@@ -26,6 +26,11 @@ function TestimonialMarqueeCard({ item }: { item: IndianTestimonial }) {
   }, [item.avatar_url]);
 
   useEffect(() => {
+    // Disable on mobile (< 768px) to prevent 50+ getBoundingClientRect calls per frame causing severe mobile jitter
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      return;
+    }
+
     let animId: number;
     let isMounted = true;
 

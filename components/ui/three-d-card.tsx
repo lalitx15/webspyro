@@ -24,17 +24,23 @@ export function ThreeDCard({
   icon,
   className,
 }: ThreeDCardProps) {
+  const [isDesktop, setIsDesktop] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsDesktop(window.innerWidth >= 768);
+  }, []);
+
   return (
     <div className={cn("uiverse-parent w-full h-[300px] sm:h-[380px]", className)}>
       <div
         className="uiverse-card relative h-full w-full rounded-[28px] sm:rounded-[40px] shadow-xl transition-all duration-500 ease-in-out"
         style={{
           background: gradient,
-          transformStyle: "preserve-3d",
+          transformStyle: isDesktop ? "preserve-3d" : "flat",
         }}
       >
         {/* Layered Floating 3D Circles */}
-        <div className="uiverse-logo absolute right-0 top-0 pointer-events-none" style={{ transformStyle: "preserve-3d" }}>
+        <div className="uiverse-logo absolute right-0 top-0 pointer-events-none" style={{ transformStyle: isDesktop ? "preserve-3d" : "flat" }}>
           <span className="uiverse-circle uiverse-circle1" />
           <span className="uiverse-circle uiverse-circle2" />
           <span className="uiverse-circle uiverse-circle3" />

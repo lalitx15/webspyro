@@ -113,6 +113,11 @@ export const SonarGrid = React.forwardRef<HTMLDivElement, SonarGridProps>(
     );
 
     React.useEffect(() => {
+      // Disable canvas on mobile (< 768px) to eliminate mobile lag and keep mobile solid clean
+      if (typeof window !== "undefined" && window.innerWidth < 768) {
+        return;
+      }
+
       const host = hostRef.current;
       const canvas = canvasRef.current;
       if (!host || !canvas) return;
@@ -357,7 +362,7 @@ export const SonarGrid = React.forwardRef<HTMLDivElement, SonarGridProps>(
         <canvas
           ref={canvasRef}
           aria-hidden="true"
-          className="text-cyan-400 pointer-events-none absolute inset-0 -z-10 size-full"
+          className="text-cyan-400 pointer-events-none absolute inset-0 -z-10 size-full hidden md:block"
           style={color ? { color } : undefined}
         />
         {children}
