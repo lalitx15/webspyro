@@ -32,13 +32,31 @@ export async function POST(request: NextRequest) {
     const supabase = createAdminClient();
 
     // 2. Locate order in database
-    const { data: order } = await supabase
+    const { data: order, error: orderLookupError } = await supabase
       .from("orders")
       .select("*")
       .eq("order_number", validated.order_number)
       .maybeSingle();
 
-    if (order) {
+    if (orderLookupError) {
+      console.error("Order lookup failed during payment verification:", orderLookupError);
+      return NextResponse.json({ error: "Unable to verify this order right now" }, { status: 500 });
+    }
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+    if (order.razorpay_order_id !== validated.razorpay_order_id) {
+      return NextResponse.json({ error: "Payment order does not match this checkout" }, { status: 400 });
+    }
+    if (order.payment_status === "paid") {
+      return NextResponse.json({
+        success: true,
+        order_number: validated.order_number,
+        payment_id: order.razorpay_payment_id,
+        message: "Payment was already verified.",
+      });
+    }
+    {
       // 3. Update Order status to paid
       await supabase
         .from("orders")

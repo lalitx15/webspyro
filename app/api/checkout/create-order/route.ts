@@ -87,12 +87,12 @@ export async function POST(request: NextRequest) {
     const orderNumber = `WSP-${Math.floor(100000 + Math.random() * 900000)}`;
 
     // 4. Create Razorpay order
-    const razorpay = getRazorpayClient();
-    let razorpayOrderId = `order_mock_${Date.now()}`;
-
+    // Never fabricate a gateway order ID: only real Razorpay orders may proceed.
+    let razorpayOrderId: string;
     try {
+      const razorpay = getRazorpayClient();
       const rzpOrder = await razorpay.orders.create({
-        amount: Math.round(financials.total_amount * 100), // amount in paise
+        amount: Math.round(financials.total_amount * 100),
         currency: "INR",
         receipt: orderNumber,
         notes: {
@@ -102,14 +102,16 @@ export async function POST(request: NextRequest) {
           customer_email: validated.customer_email,
         },
       });
-
-      if (rzpOrder?.id) {
-        razorpayOrderId = rzpOrder.id;
+      if (!rzpOrder?.id) {
+        return NextResponse.json({ error: "Payment provider did not create an order" }, { status: 502 });
       }
+      razorpayOrderId = rzpOrder.id;
     } catch (rzpErr) {
-      console.warn("Razorpay API order creation warning, using simulated order ID:", rzpErr);
-      // In sandbox/placeholder keys, fallback to deterministic order ID
-      razorpayOrderId = `order_test_${Date.now()}`;
+      console.error("Razorpay order creation failed:", rzpErr);
+      return NextResponse.json(
+        { error: "Unable to start payment right now. Please try again later." },
+        { status: 502 }
+      );
     }
 
     // 5. Insert order into database
@@ -134,9 +136,12 @@ export async function POST(request: NextRequest) {
       .select()
       .single();
 
-    if (orderInsertErr) {
+    if (orderInsertErr || !orderRecord) {
       console.error("Order insertion error", orderInsertErr);
-      // Even if database has local constraint issue, return the order details so flow succeeds
+      return NextResponse.json(
+        { error: "Unable to save your order. Please try again; you have not been charged." },
+        { status: 500 }
+      );
     }
 
     // 6. Insert Order Timeline record
@@ -157,7 +162,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      order_id: orderRecord?.id || `ord_${Date.now()}`,
+      order_id: orderRecord.id,
       order_number: orderNumber,
       razorpay_order_id: razorpayOrderId,
       amount: Math.round(financials.total_amount * 100),

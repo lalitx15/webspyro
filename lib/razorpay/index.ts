@@ -1,20 +1,27 @@
 import Razorpay from "razorpay";
 import crypto from "crypto";
 
-// Singleton Razorpay instance for server-side order generation
+/** Create a Razorpay client only when real server-side credentials are configured. */
 export function getRazorpayClient(): Razorpay {
-  const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "rzp_test_placeholder";
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || "placeholder-secret";
+  const keyId = process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-  return new Razorpay({
-    key_id: keyId,
-    key_secret: keySecret,
-  });
+  if (!keyId || !keySecret) {
+    throw new Error("Razorpay server credentials are not configured");
+  }
+
+  return new Razorpay({ key_id: keyId, key_secret: keySecret });
 }
 
-/**
- * Verifies Razorpay HMAC SHA256 payment signature
- */
+function safeCompareHex(expected: string, actual: string): boolean {
+  if (!/^[a-f0-9]+$/i.test(actual) || expected.length !== actual.length) return false;
+  const expectedBuffer = Buffer.from(expected, "hex");
+  const actualBuffer = Buffer.from(actual, "hex");
+  return expectedBuffer.length === actualBuffer.length &&
+    crypto.timingSafeEqual(expectedBuffer, actualBuffer);
+}
+
+/** Verify Razorpay's payment signature. Missing credentials always fail closed. */
 export function verifyRazorpaySignature({
   razorpay_order_id,
   razorpay_payment_id,
@@ -24,15 +31,9 @@ export function verifyRazorpaySignature({
   razorpay_payment_id: string;
   razorpay_signature: string;
 }): boolean {
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || "placeholder-secret";
-
-  // Allow mock test signature in development or test environment
-  if (
-    razorpay_signature === "mock_verified_signature" ||
-    razorpay_signature.startsWith("mock_") ||
-    keySecret === "placeholder-secret"
-  ) {
-    return true;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keySecret || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    return false;
   }
 
   const generatedSignature = crypto
@@ -40,35 +41,24 @@ export function verifyRazorpaySignature({
     .update(`${razorpay_order_id}|${razorpay_payment_id}`)
     .digest("hex");
 
-  return crypto.timingSafeEqual(
-    Buffer.from(generatedSignature),
-    Buffer.from(razorpay_signature)
-  );
+  return safeCompareHex(generatedSignature, razorpay_signature);
 }
 
-/**
- * Verifies Razorpay Webhook signature
- */
+/** Verify the raw Razorpay webhook body. Missing credentials always fail closed. */
 export function verifyWebhookSignature(
   body: string,
   signature: string,
   secret?: string
 ): boolean {
-  const webhookSecret = secret || process.env.RAZORPAY_WEBHOOK_SECRET || "placeholder-webhook-secret";
-
-  if (signature.startsWith("mock_") || webhookSecret === "placeholder-webhook-secret") {
-    return true;
-  }
+  const webhookSecret = secret || process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!webhookSecret || !signature) return false;
 
   const generatedSignature = crypto
     .createHmac("sha256", webhookSecret)
     .update(body)
     .digest("hex");
 
-  return crypto.timingSafeEqual(
-    Buffer.from(generatedSignature),
-    Buffer.from(signature)
-  );
+  return safeCompareHex(generatedSignature, signature);
 }
 
 export interface OrderFinancials {
@@ -80,9 +70,7 @@ export interface OrderFinancials {
   gst_percentage: number;
 }
 
-/**
- * Calculates complete GST and discount financials
- */
+/** Calculates GST and discount financials. */
 export function calculateOrderFinancials(
   basePrice: number,
   coupon?: { discount_type: "percentage" | "fixed"; discount_value: number } | null,
