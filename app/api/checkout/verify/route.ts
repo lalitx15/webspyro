@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
     {
       // 3. Update Order status to paid
-      await supabase
+      const { error: paymentUpdateError } = await supabase
         .from("orders")
         .update({
           payment_status: "paid",
@@ -67,6 +67,11 @@ export async function POST(request: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", order.id);
+
+      if (paymentUpdateError) {
+        console.error("Failed to persist verified payment:", paymentUpdateError);
+        return NextResponse.json({ error: "Payment was verified but order status could not be updated. Please contact support." }, { status: 500 });
+      }
 
       // 4. Log timeline event
       await supabase.from("order_timeline").insert({

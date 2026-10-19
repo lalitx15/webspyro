@@ -155,10 +155,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const keyId =
-      process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ||
-      process.env.RAZORPAY_KEY_ID ||
-      "rzp_test_placeholder";
+    const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
+    if (!keyId) {
+      console.error("Razorpay checkout key ID is not configured");
+      return NextResponse.json({ error: "Payment checkout is not configured. Please contact support." }, { status: 503 });
+    }
 
     return NextResponse.json({
       success: true,
