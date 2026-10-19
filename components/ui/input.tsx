@@ -240,14 +240,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             defaultValue={defaultValue}
             onChange={onChange}
             className={cn(
-              "w-full h-14 px-4 pt-5 pb-1 rounded-input text-base text-textPrimary glass-input appearance-none bg-white/80 cursor-pointer focus:border-accent focus:ring-2 focus:ring-accent/20",
+              "w-full max-w-full h-14 pl-3.5 pr-8 pt-5 pb-1 rounded-input text-xs sm:text-sm text-textPrimary glass-input appearance-none bg-white/95 cursor-pointer focus:border-accent focus:ring-2 focus:ring-accent/20 truncate overflow-hidden",
               error && "border-danger focus:border-danger focus:ring-danger/20",
               className
             )}
             {...props}
           >
             {options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
+              <option key={opt.value} value={opt.value} className="text-black bg-white text-xs sm:text-sm py-1">
                 {opt.label}
               </option>
             ))}

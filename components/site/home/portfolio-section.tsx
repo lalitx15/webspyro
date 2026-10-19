@@ -120,7 +120,9 @@ export function PortfolioSection() {
                 <Badge variant="blue" pulseDot>
                   Recent Case Studies
                 </Badge>
-                <Badge variant="mint">50+ Live Client Deployments</Badge>
+                <Badge variant="mint" className="text-slate-950 font-black bg-[#dcfce7] border-emerald-400">
+                  50+ Live Client Deployments
+                </Badge>
               </div>
             </SectionReveal>
 

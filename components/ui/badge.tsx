@@ -31,36 +31,36 @@ export function Badge({
 }: BadgeProps) {
   const variantStyles: Record<BadgeVariant, { container: string; dot: string }> = {
     mint: {
-      container: "bg-[#EDFAF8] text-[#0F766E] border-[#A9E3DD]/60",
-      dot: "bg-[#0D9488]",
+      container: "bg-[#dcfce7] text-slate-950 font-extrabold border-emerald-400/80 shadow-xs",
+      dot: "bg-emerald-600",
     },
     peach: {
-      container: "bg-[#FDF5ED] text-[#B45309] border-[#F8CFA6]/60",
-      dot: "bg-[#D97706]",
+      container: "bg-[#ffedd5] text-slate-950 font-extrabold border-amber-400/80 shadow-xs",
+      dot: "bg-amber-600",
     },
     pink: {
-      container: "bg-[#FDECEF] text-[#BE123C] border-[#F4A9BE]/60",
-      dot: "bg-[#E11D48]",
+      container: "bg-[#ffe4e6] text-slate-950 font-extrabold border-rose-400/80 shadow-xs",
+      dot: "bg-rose-600",
     },
     sky: {
-      container: "bg-[#EEF9FD] text-[#0369A1] border-[#8FD3F0]/60",
-      dot: "bg-[#0284C7]",
+      container: "bg-[#e0f2fe] text-slate-950 font-extrabold border-sky-400/80 shadow-xs",
+      dot: "bg-sky-600",
     },
     periwinkle: {
-      container: "bg-[#ECEEFC] text-[#4338CA] border-[#6C7CF0]/50",
-      dot: "bg-[#4F46E5]",
+      container: "bg-[#e0e7ff] text-slate-950 font-extrabold border-indigo-400/80 shadow-xs",
+      dot: "bg-indigo-600",
     },
     lavender: {
-      container: "bg-[#F5F1FC] text-[#6D28D9] border-[#C9B8F0]/60",
-      dot: "bg-[#7C3AED]",
+      container: "bg-[#f3e8ff] text-slate-950 font-extrabold border-purple-400/80 shadow-xs",
+      dot: "bg-purple-600",
     },
     blue: {
-      container: "bg-accent/10 text-accent border-accent/20",
-      dot: "bg-accent",
+      container: "bg-cyan-500/15 text-cyan-300 border-cyan-400/40",
+      dot: "bg-cyan-400",
     },
     neutral: {
-      container: "bg-white/80 text-textSecondary border-white shadow-card-flat",
-      dot: "bg-slate-400",
+      container: "bg-white/95 text-slate-950 font-extrabold border-slate-300 shadow-sm",
+      dot: "bg-slate-700",
     },
   };
 

@@ -142,17 +142,38 @@ section.bg-white span.text-black,
 [class*="bg-neutral-9"] h3:not([class*="text-black"]),
 [class*="bg-neutral-9"] li:not([class*="text-black"]),
 [class*="bg-neutral-9"] span:not([class*="text-black"]):not([class*="bg-cyan"]):not([class*="bg-teal"]):not([class*="bg-white"]),
-[class*="bg-[#0"] p:not([class*="text-black"]),
-[class*="bg-[#0"] h1:not([class*="text-black"]),
-[class*="bg-[#0"] h2:not([class*="text-black"]),
-[class*="bg-[#0"] h3:not([class*="text-black"]),
-[class*="bg-[#0"] span:not([class*="text-black"]):not([class*="bg-cyan"]):not([class*="bg-teal"]):not([class*="bg-white"]),
-.cinematic-footer-wrapper p,
 .cinematic-footer-wrapper h1,
 .cinematic-footer-wrapper h2,
 .cinematic-footer-wrapper h3,
 .cinematic-footer-wrapper span:not([class*="text-black"]):not([class*="bg-cyan"]):not([class*="bg-teal"]):not([class*="bg-white"]) {
   color: #ffffff;
+}
+
+/* HIGH-CONTRAST OVERRIDE: Light/White pills, badges & containers ALWAYS show black text */
+.bg-white,
+[class*="bg-white"],
+.bg-slate-50,
+.bg-slate-100,
+.bg-slate-200,
+[class*="bg-mint"],
+[class*="bg-[#dcfc"],
+[class*="bg-[#EDFA"],
+[class*="bg-[#e0f2"],
+[class*="bg-[#ffe4"],
+[class*="bg-[#ffed"] {
+  color: #000000;
+}
+
+.bg-white span:not([class*="text-white"]):not([class*="bg-black"]):not([class*="bg-neutral"]),
+.bg-white p:not([class*="text-white"]),
+.bg-white h1:not([class*="text-white"]),
+.bg-white h2:not([class*="text-white"]),
+.bg-white h3:not([class*="text-white"]),
+[class*="bg-white"] span:not([class*="text-white"]):not([class*="bg-black"]):not([class*="bg-neutral"]),
+[class*="bg-white"] p:not([class*="text-white"]),
+[class*="bg-[#dcfc"] span,
+[class*="bg-[#dcfc"] {
+  color: #000000 !important;
 }
 
 /* Ensure secondary text in dark sections is readable slate-300 / neutral-300, NEVER black */

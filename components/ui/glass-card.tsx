@@ -58,9 +58,11 @@ export function GlassCard({
     }
   };
 
+  const hasCustomBg = className?.includes("bg-");
+
   const variantStyles = {
-    card: "rounded-card glass-panel shadow-card",
-    panel: "rounded-panel glass-panel shadow-card",
+    card: hasCustomBg ? "rounded-card shadow-card" : "rounded-card glass-panel shadow-card",
+    panel: hasCustomBg ? "rounded-panel shadow-card" : "rounded-panel glass-panel shadow-card",
     subtle: "rounded-card bg-white/50 backdrop-blur-md border border-white/60 shadow-card-flat",
     flat: "rounded-card bg-white/90 border border-slate-200/60 shadow-sm",
   };

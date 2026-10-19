@@ -52,64 +52,24 @@ export function FloatingWidgets({ onOpenChat }: FloatingWidgetsProps) {
 
   return (
     <div className="fixed right-4 sm:right-6 bottom-6 z-40 flex flex-col items-center gap-3 select-none">
-      {/* 1. Back to Top Button with Animated Progress Ring */}
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.6, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.6, y: 15 }}
-            transition={{ type: "spring", damping: 25, stiffness: 350 }}
-            onClick={scrollToTop}
-            aria-label="Scroll back to top"
-            className="w-12 h-12 rounded-full glass-panel bg-white/90 shadow-card hover:shadow-card-hover flex items-center justify-center text-textPrimary hover:text-accent cursor-pointer group transition-transform relative"
-          >
-            {/* SVG Progress Ring */}
-            <svg className="w-12 h-12 -rotate-90 absolute inset-0 pointer-events-none">
-              <circle
-                cx="24"
-                cy="24"
-                r={radius}
-                className="stroke-slate-200"
-                strokeWidth="2.5"
-                fill="transparent"
-              />
-              <circle
-                cx="24"
-                cy="24"
-                r={radius}
-                className="stroke-accent transition-all duration-150"
-                strokeWidth="2.5"
-                strokeDasharray={circumference}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
-                fill="transparent"
-              />
-            </svg>
-
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform text-accent" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* 2. Floating Live Chat Bubble */}
+      {/* 1. Floating AI Live Chat Button - Clean Cyber Tech Pill/Circle */}
       {settings.live_chat_enabled && (
         <motion.button
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.94 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.92 }}
           onClick={() => {
             if (onOpenChat) onOpenChat();
             else toggleChat();
           }}
-          aria-label="Open Live Chat"
-          className="w-13 h-13 rounded-full bg-accent-grad text-white shadow-glow hover:shadow-glow-lg flex items-center justify-center cursor-pointer relative"
+          aria-label="Open AI Live Chat"
+          className="w-12 h-12 rounded-full bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-[0_4px_20px_rgba(6,182,212,0.45)] hover:shadow-[0_6px_25px_rgba(6,182,212,0.6)] border border-cyan-300/40 flex items-center justify-center cursor-pointer relative group transition-all"
         >
-          <MessagesSquare className="w-6 h-6" />
+          <MessagesSquare className="w-5 h-5 text-white transition-transform group-hover:scale-110" />
           {unreadCount > 0 && (
             <motion.span
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-rose border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-xs"
+              className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 border-2 border-white flex items-center justify-center text-[9px] font-black text-white shadow-xs"
             >
               {unreadCount > 9 ? "9+" : unreadCount}
             </motion.span>
@@ -117,18 +77,18 @@ export function FloatingWidgets({ onOpenChat }: FloatingWidgetsProps) {
         </motion.button>
       )}
 
-      {/* 3. Floating WhatsApp Button with Pulsing Ping Ring */}
+      {/* 2. Floating WhatsApp Button - Clean Official Emerald Branding */}
       <motion.a
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.94 }}
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="w-13 h-13 rounded-full bg-[#25D366] text-white shadow-lg hover:shadow-xl flex items-center justify-center cursor-pointer relative group"
+        className="w-12 h-12 rounded-full bg-[#25D366] text-white shadow-[0_4px_20px_rgba(37,211,102,0.45)] hover:shadow-[0_6px_25px_rgba(37,211,102,0.6)] border border-emerald-300/40 flex items-center justify-center cursor-pointer relative group transition-all"
       >
-        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-40 pointer-events-none" />
-        <MessageCircle className="w-6 h-6 fill-white text-white" />
+        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30 pointer-events-none" />
+        <MessageCircle className="w-6 h-6 fill-white text-white transition-transform group-hover:scale-110" />
       </motion.a>
     </div>
   );

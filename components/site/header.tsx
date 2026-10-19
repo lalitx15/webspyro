@@ -127,8 +127,8 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
           
           {/* 1. Brand Logo: Mobile (Phone) Text-Only vs Desktop Dragon Emblem + Typography */}
           <Link href="/" className="flex items-center group select-none shrink-0 py-0.5">
-            {/* Mobile (phone): Text-only Logo */}
-            <div className="block md:hidden">
+            {/* Mobile (phone): Text-only Logo with comfortable left padding */}
+            <div className="block md:hidden pl-2 sm:pl-0">
               <Image
                 src="/images/logo-mobile.png"
                 alt={settings.site_name || "WebSpyra"}
@@ -186,12 +186,22 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
 
           {/* 3. Right Action Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            {/* Search Trigger */}
+            {/* Mobile Call Us Now Button */}
+            <a
+              href="tel:+918958889538"
+              className="inline-flex sm:hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-cyan-300 text-[10.5px] font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)] active:scale-95 transition-all select-none"
+              aria-label="Call Us Now: +91 89588 89538"
+            >
+              <PhoneCall className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
+              <span>Call Us: +91 89588 89538</span>
+            </a>
+
+            {/* Desktop Search Trigger */}
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label="Search website"
-              className="w-7 h-7 flex items-center justify-center text-neutral-300 hover:text-cyan-400 transition-all cursor-pointer bg-transparent border-0 shadow-none"
+              className="hidden sm:flex w-7 h-7 items-center justify-center text-neutral-300 hover:text-cyan-400 transition-all cursor-pointer bg-transparent border-0 shadow-none"
             >
               <Search className="w-3.5 h-3.5" />
             </button>

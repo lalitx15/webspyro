@@ -43,23 +43,23 @@ export function EnquirySection() {
 
   const businessTypeOptions = [
     { value: "retail", label: "Retail / Local Store / Showroom" },
-    { value: "services", label: "Professional Services / Consulting / Agency" },
+    { value: "services", label: "Professional Services / Agency" },
     { value: "healthcare", label: "Healthcare / Clinic / Doctors" },
-    { value: "real-estate", label: "Real Estate / Architecture / Interiors" },
-    { value: "ecommerce", label: "E-Commerce / D2C Brand / Products" },
-    { value: "restaurant", label: "Restaurant / Cafe / Food & Hospitality" },
-    { value: "education", label: "Education / Academy / Coaching Institute" },
-    { value: "startup", label: "Tech Startup / SaaS / Digital Enterprise" },
+    { value: "real-estate", label: "Real Estate / Interiors" },
+    { value: "ecommerce", label: "E-Commerce / D2C Brand" },
+    { value: "restaurant", label: "Restaurant / Cafe / Food" },
+    { value: "education", label: "Education / Coaching" },
+    { value: "startup", label: "Tech Startup / SaaS" },
     { value: "other", label: "Other / Not Listed" },
   ];
 
   const servicePlanOptions = [
-    { value: "classic", label: "Classic Growth Website — ₹14,999 (Most Popular)" },
-    { value: "starter", label: "Starter Business Website — ₹8,999" },
-    { value: "premium", label: "Premium Corporate Web App — ₹24,999" },
-    { value: "ecom-starter", label: "E-Commerce Online Store — ₹18,999" },
-    { value: "redesign", label: "Website Redesign & Speed Optimization" },
-    { value: "custom", label: "Custom Software / Web Application" },
+    { value: "classic", label: "Classic Growth — ₹14,999 (Popular)" },
+    { value: "starter", label: "Starter Business — ₹8,999" },
+    { value: "premium", label: "Premium Corporate — ₹24,999" },
+    { value: "ecom-starter", label: "E-Commerce Store — ₹18,999" },
+    { value: "redesign", label: "Website Redesign & Speed" },
+    { value: "custom", label: "Custom Software / Web App" },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,7 +139,9 @@ export function EnquirySection() {
               <Badge variant="blue" pulseDot>
                 Instant Callback
               </Badge>
-              <Badge variant="mint">Get Started Today</Badge>
+              <Badge variant="mint" className="text-slate-950 font-black bg-[#dcfce7] border-emerald-400">
+                Get Started Today
+              </Badge>
             </div>
           </SectionReveal>
 
@@ -159,15 +161,15 @@ export function EnquirySection() {
         {/* 2-Column Grid: Form + Contact Info Card */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           {/* Form Column (7 cols) */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 w-full max-w-full overflow-hidden">
             <ShineBorder
               borderWidth={2}
               duration={4}
-              gradient="from-blue-500 via-red-500 to-teal-400"
+              gradient="from-cyan-500 via-blue-500 to-indigo-500"
               borderRadius="1.75rem"
-              className="w-full shadow-card hover:shadow-card-hover transition-shadow"
+              className="w-full shadow-2xl hover:shadow-[0_20px_50px_rgba(6,182,212,0.18)] transition-all duration-300 overflow-hidden"
             >
-              <div className="p-5 sm:p-10 rounded-[calc(1.75rem-2px)] bg-white text-black">
+              <div className="p-5 sm:p-10 rounded-[calc(1.75rem-2px)] bg-white text-black w-full max-w-full overflow-hidden">
               {isSuccess ? (
                 <div className="py-12 text-center space-y-6">
                   <div className="w-16 h-16 rounded-full bg-mint-light flex items-center justify-center text-success mx-auto shadow-glow-mint">
