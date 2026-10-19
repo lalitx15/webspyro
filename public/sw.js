@@ -1,4 +1,4 @@
-const CACHE_NAME = 'webspyra-cache-v1';
+const CACHE_NAME = 'webspyra-cache-v2';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [
