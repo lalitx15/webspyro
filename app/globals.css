@@ -46,6 +46,19 @@ body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
+/* Anti-flicker and smooth mobile GPU rendering */
+header,
+main,
+section,
+.cinematic-footer-wrapper,
+[data-slot="sonar-grid"],
+[data-slot="grid-pulse"] {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;

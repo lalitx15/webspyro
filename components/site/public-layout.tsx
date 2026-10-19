@@ -213,10 +213,10 @@ export function PublicLayout({ children }: PublicLayoutProps) {
               value={plan}
               onChange={(e) => setPlan(e.target.value)}
               options={[
-                { value: "starter", label: "Starter Business Website (₹8,999)" },
-                { value: "classic", label: "Classic Growth Website (₹14,999) - Most Popular" },
-                { value: "premium", label: "Premium Corporate Website (₹24,999)" },
-                { value: "ecommerce", label: "E-Commerce Online Store (₹18,999+)" },
+                { value: "starter", label: "Starter Business Website (₹5,999)" },
+                { value: "classic", label: "Classic Growth Website (₹9,999) - Most Popular" },
+                { value: "premium", label: "Premium Corporate Website (₹15,999)" },
+                { value: "ecommerce", label: "E-Commerce Online Store (₹11,999+)" },
                 { value: "webapp", label: "Custom Web Application / SaaS" },
                 { value: "redesign", label: "Website Redesign & Speed Optimization" },
               ]}

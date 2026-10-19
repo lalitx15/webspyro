@@ -210,8 +210,16 @@ export const SonarGrid = React.forwardRef<HTMLDivElement, SonarGridProps>(
 
       const resize = () => {
         const rect = host.getBoundingClientRect();
-        width = Math.max(1, Math.round(rect.width));
-        height = Math.max(1, Math.round(rect.height));
+        const nextW = Math.max(1, Math.round(rect.width));
+        const nextH = Math.max(1, Math.round(rect.height));
+
+        // Prevent clearing canvas and causing mobile screen flicker during address bar scroll
+        if (width > 0 && Math.abs(nextW - width) < 2 && Math.abs(nextH - height) < 80) {
+          return;
+        }
+
+        width = nextW;
+        height = nextH;
         const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
         canvas.width = Math.round(width * dpr);
         canvas.height = Math.round(height * dpr);

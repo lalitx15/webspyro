@@ -20,7 +20,7 @@ export const AetherFlowHero = ({
   badgeText = "WE BUILD WEBSITES THAT HELP BUSINESSES GROW",
   headline,
   subtitle = "Fast, modern websites built to turn visitors into enquiries — without the agency complexity.",
-  priceText = "₹6,999/-",
+  priceText = "₹2,999/-",
   primaryCtaText = "GET A FREE WEBSITE QUOTE",
   onPrimaryCta,
   secondaryCtaText = "See our work",

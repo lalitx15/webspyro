@@ -204,7 +204,7 @@ export default function AstroBubbleHero({
   wordmark = "WEBSPYRA",
   issue = "#01",
   badge = "WE BUILD WEBSITES THAT HELP BUSINESSES GROW",
-  priceTag = "Website starts from ₹6,999/-",
+  priceTag = "Website starts from ₹2,999/-",
   title = "A better website.\nMore trust. More customers.",
   blurb = "Fast, modern websites built to turn visitors into enquiries — without the agency complexity.",
   credit = "Webspyra Web Agency · Fast & High Conversion",

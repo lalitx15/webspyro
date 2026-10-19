@@ -54,10 +54,10 @@ export function EnquirySection() {
   ];
 
   const servicePlanOptions = [
-    { value: "classic", label: "Classic Growth — ₹14,999 (Popular)" },
-    { value: "starter", label: "Starter Business — ₹8,999" },
-    { value: "premium", label: "Premium Corporate — ₹24,999" },
-    { value: "ecom-starter", label: "E-Commerce Store — ₹18,999" },
+    { value: "classic", label: "Classic Growth — ₹9,999 (Popular)" },
+    { value: "starter", label: "Starter Business — ₹5,999" },
+    { value: "premium", label: "Premium Corporate — ₹15,999" },
+    { value: "ecom-starter", label: "E-Commerce Store — ₹11,999" },
     { value: "redesign", label: "Website Redesign & Speed" },
     { value: "custom", label: "Custom Software / Web App" },
   ];
@@ -297,8 +297,8 @@ export function EnquirySection() {
                       variant="primary"
                       size="lg"
                       isLoading={isSubmitting}
-                      className="w-full shadow-glow"
-                      rightIcon={<Send className="w-4 h-4" />}
+                      className="w-full !text-white text-white font-extrabold bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 border border-cyan-300/50 shadow-[0_0_25px_rgba(6,182,212,0.45)] hover:shadow-[0_0_35px_rgba(6,182,212,0.7)] hover:border-cyan-300"
+                      rightIcon={<Send className="w-4 h-4 text-white" />}
                     >
                       Send Enquiry & Get Free Callback
                     </Button>

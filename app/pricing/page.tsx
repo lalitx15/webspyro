@@ -54,9 +54,9 @@ export default function PricingPage() {
   const businessPlans = [
     {
       name: "Starter Business",
-      price: "₹8,999",
+      price: "₹5,999",
       billing: "one-time",
-      oldPrice: "₹12,999",
+      oldPrice: "₹9,999",
       renewal: "₹2,999 / year",
       desc: "For local stores, clinics, and new firms wanting a fast modern presence.",
       highlight: false,
@@ -81,9 +81,9 @@ export default function PricingPage() {
     },
     {
       name: "Classic Growth",
-      price: "₹14,999",
+      price: "₹9,999",
       billing: "one-time",
-      oldPrice: "₹24,999",
+      oldPrice: "₹16,999",
       renewal: "₹3,999 / year",
       desc: "Our most popular tier engineered for high lead conversion, admin control and Google SEO.",
       highlight: true,
@@ -109,9 +109,9 @@ export default function PricingPage() {
     },
     {
       name: "Premium Corporate",
-      price: "₹24,999",
+      price: "₹15,999",
       billing: "one-time",
-      oldPrice: "₹39,999",
+      oldPrice: "₹25,999",
       renewal: "₹4,999 / year",
       desc: "Bespoke corporate architecture with high-value admin panel and priority 24/7 care.",
       highlight: false,
@@ -214,9 +214,9 @@ export default function PricingPage() {
   const ecommercePlans = [
     {
       name: "E-Commerce Starter",
-      price: "₹18,999",
+      price: "₹11,999",
       billing: "one-time",
-      oldPrice: "₹29,999",
+      oldPrice: "₹19,999",
       renewal: "₹4,999 / year",
       desc: "Sell up to 50 products online with UPI checkout and order dashboard.",
       highlight: false,
@@ -238,9 +238,9 @@ export default function PricingPage() {
     },
     {
       name: "E-Commerce Pro",
-      price: "₹29,999",
+      price: "₹17,999",
       billing: "one-time",
-      oldPrice: "₹48,999",
+      oldPrice: "₹29,999",
       renewal: "₹5,999 / year",
       desc: "High-volume D2C brand storefront with product variants and review feeds.",
       highlight: true,
@@ -263,9 +263,9 @@ export default function PricingPage() {
     },
     {
       name: "Custom Marketplace",
-      price: "₹49,999+",
+      price: "₹24,999+",
       billing: "one-time",
-      oldPrice: "₹79,999",
+      oldPrice: "₹44,999",
       renewal: "₹7,999 / year",
       desc: "Full-scale custom shopping app with multi-vendor support and ERP sync.",
       highlight: false,

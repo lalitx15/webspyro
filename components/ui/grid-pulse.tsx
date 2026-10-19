@@ -85,7 +85,7 @@ export function GridPulse({
     const paper = canvas.current;
     const ctx = paper?.getContext("2d");
     if (!el || !paper || !ctx) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || window.innerWidth < 768) return;
 
     let cols = 1;
     let rows = 1;

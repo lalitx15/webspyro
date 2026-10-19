@@ -96,15 +96,15 @@ export function HeroSection({ onOpenQuote }: HeroSectionProps) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="inline-flex items-center gap-2.5 px-4 sm:px-5 py-2 rounded-full bg-white/[0.07] border border-white/15 backdrop-blur-md shadow-sm mt-7"
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-cyan-950/40 border border-cyan-400/50 backdrop-blur-md shadow-[0_0_25px_rgba(6,182,212,0.4)] mt-7"
         >
-          <span className="w-5 h-5 rounded-full bg-cyan-500 text-black flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.6)]">
+          <span className="w-5 h-5 rounded-full bg-cyan-400 text-black flex items-center justify-center shrink-0 shadow-[0_0_12px_#22d3ee]">
             <Tag className="w-3 h-3 fill-black stroke-none" />
           </span>
-          <span className="text-xs sm:text-sm font-medium text-neutral-200">
+          <span className="text-xs sm:text-sm font-semibold !text-white text-white tracking-wide" style={{ color: "#ffffff" }}>
             Website starts from{" "}
-            <strong className="font-extrabold text-cyan-400 text-sm sm:text-base">
-              ₹6,999/-
+            <strong className="font-extrabold text-cyan-300 drop-shadow-[0_0_10px_rgba(34,211,238,0.9)] text-sm sm:text-base">
+              ₹2,999/-
             </strong>
           </span>
         </motion.div>

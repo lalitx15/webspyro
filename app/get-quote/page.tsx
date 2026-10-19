@@ -128,26 +128,26 @@ export default function GetQuotePage() {
 
   const budgetOptions = [
     {
-      id: "8k-15k",
-      range: "₹8,999 — ₹14,999",
+      id: "5k-10k",
+      range: "₹5,999 — ₹9,999",
       tagline: "Starter to Classic Website",
       desc: "Ideal for new ventures needing a credible, modern web presence fast.",
     },
     {
-      id: "15k-25k",
-      range: "₹14,999 — ₹24,999",
+      id: "10k-18k",
+      range: "₹9,999 — ₹17,999",
       tagline: "Classic Growth & Starter E-Commerce",
       desc: "Our most requested tier for high conversion and lead generation.",
     },
     {
-      id: "25k-50k",
-      range: "₹24,999 — ₹49,999",
+      id: "18k-25k",
+      range: "₹17,999 — ₹24,999",
       tagline: "Premium Corporate & Custom Store",
       desc: "Extensive product catalog, custom CMS, or bespoke animations.",
     },
     {
-      id: "50k+",
-      range: "₹50,000+",
+      id: "25k+",
+      range: "₹24,999+",
       tagline: "Enterprise & Custom Web Platform",
       desc: "Full-scale custom software, multi-tenant portal, or high-volume app.",
     },

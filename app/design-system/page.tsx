@@ -372,9 +372,9 @@ export default function DesignSystemPage() {
                   <Select
                     label="Interested Plan"
                     options={[
-                      { value: "starter", label: "Starter Business (₹8,999)" },
-                      { value: "classic", label: "Classic Growth (₹14,999) - Most Popular" },
-                      { value: "premium", label: "Premium Corporate (₹24,999)" },
+                      { value: "starter", label: "Starter Business (₹5,999)" },
+                      { value: "classic", label: "Classic Growth (₹9,999) - Most Popular" },
+                      { value: "premium", label: "Premium Corporate (₹15,999)" },
                     ]}
                   />
                   <div className="pt-2 flex justify-end gap-3">

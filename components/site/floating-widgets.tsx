@@ -13,42 +13,19 @@ export interface FloatingWidgetsProps {
 
 export function FloatingWidgets({ onOpenChat }: FloatingWidgetsProps) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSiteSettings);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const [scrollPercentage, setScrollPercentage] = useState(0);
 
   useEffect(() => {
     getSiteSettings().then((data) => {
       if (data) setSettings(data);
     });
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-
-      setShowBackToTop(scrollTop > 280);
-      setScrollPercentage(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  const { toggleChat, unreadCount } = useChat();
 
   const cleanWhatsApp = settings.whatsapp_number.replace(/[^0-9]/g, "");
   const waUrl = `https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent(
     settings.whatsapp_default_message || "Hi Webspyra, I am looking for a new website."
   )}`;
-
-  // Circular progress calculation
-  const radius = 18;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (scrollPercentage / 100) * circumference;
-
-  const { toggleChat, unreadCount } = useChat();
 
   return (
     <div className="fixed right-4 sm:right-6 bottom-6 z-40 flex flex-col items-center gap-3 select-none">

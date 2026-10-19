@@ -83,6 +83,7 @@ const STYLES = `
 
 /* Glass Pill Theming */
 .footer-glass-pill {
+  color: #ffffff !important;
   background: linear-gradient(145deg, var(--pill-bg-1) 0%, var(--pill-bg-2) 100%);
   box-shadow: 
       0 10px 30px -10px var(--pill-shadow), 
@@ -100,7 +101,7 @@ const STYLES = `
   box-shadow: 
       0 20px 40px -10px var(--pill-shadow-hover), 
       inset 0 1px 1px var(--pill-highlight-hover);
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 /* Giant Background Text Masking */
@@ -240,6 +241,10 @@ export function CinematicFooter({
     if (typeof window === "undefined") return;
     if (!wrapperRef.current) return;
 
+    // Only run scrubbed parallax on desktop to prevent mobile GPU compositor lag and blinking
+    const isDesktop = window.innerWidth >= 768;
+    if (!isDesktop) return;
+
     // React strict mode compatible GSAP context cleanup
     const ctx = gsap.context(() => {
       // Background Parallax
@@ -299,16 +304,14 @@ export function CinematicFooter({
       
       {/* 
         The "Curtain Reveal" Wrapper:
-        It sits in standard flow. Because it has clip-path, its contents
-        are ONLY visible within its bounding box. 
+        Fixed on desktop with clip-path, relative on mobile to prevent GPU layer thrashing.
       */}
       <div
         ref={wrapperRef}
-        className={cn("relative h-screen w-full select-none", className)}
-        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+        className={cn("relative min-h-[85vh] md:h-screen w-full select-none overflow-hidden md:overflow-visible", className)}
       >
-        {/* The actual footer stays fixed to the viewport underneath everything */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-black/[0.98] text-white cinematic-footer-wrapper">
+        {/* The footer stays fixed on desktop, and relative on mobile */}
+        <footer className="relative md:fixed md:bottom-0 md:left-0 flex min-h-[85vh] md:h-screen w-full flex-col justify-between overflow-hidden bg-black/[0.98] text-white cinematic-footer-wrapper">
           
           {/* Ambient Light & Grid Background */}
           <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[90px] pointer-events-none z-0" />
@@ -342,37 +345,52 @@ export function CinematicFooter({
             {/* Interactive Magnetic Pills Layout */}
             <div ref={linksRef} className="flex flex-col items-center gap-5 sm:gap-6 w-full">
               {/* Primary Actions */}
-              <div className="flex flex-col sm:flex-row justify-center gap-3.5 sm:gap-4 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row justify-center gap-3.5 sm:gap-5 w-full sm:w-auto">
                 <MagneticButton
                   as="button"
                   onClick={onOpenQuote}
-                  className="footer-glass-pill w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-5 rounded-full text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2 sm:gap-3 group shadow-[0_0_30px_rgba(6,182,212,0.3)] hover:shadow-[0_0_40px_rgba(6,182,212,0.6)]"
+                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group bg-gradient-to-r from-cyan-500/25 via-blue-500/25 to-cyan-500/25 border-2 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.5),inset_0_0_15px_rgba(6,182,212,0.25)] hover:shadow-[0_0_40px_rgba(6,182,212,0.85),inset_0_0_20px_rgba(6,182,212,0.4)] transition-all drop-shadow-[0_0_12px_rgba(6,182,212,0.7)]"
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping mr-1" />
-                  Get Free Website Quote
+                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-300 animate-ping mr-1 shadow-[0_0_12px_#22d3ee]" />
+                  <span className="!text-white text-white tracking-wide">Get Free Website Quote</span>
+                  <svg className="w-4 h-4 text-cyan-300 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
                 </MagneticButton>
                 
                 <MagneticButton
                   as="button"
                   onClick={scrollToServices}
-                  className="footer-glass-pill w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-5 rounded-full text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2 sm:gap-3 group border border-white/20 bg-white/10 hover:bg-white/20"
+                  className="footer-glass-pill w-full sm:w-auto px-7 sm:px-10 py-3.5 sm:py-5 rounded-full !text-white text-white font-extrabold text-xs sm:text-base flex items-center justify-center gap-2.5 sm:gap-3 group border-2 border-cyan-400/50 hover:border-cyan-300 bg-white/[0.08] hover:bg-cyan-950/40 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] transition-all"
                 >
-                  Explore Features
-                  <svg className="w-4 h-4 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  <span className="!text-white text-white tracking-wide">Explore Features</span>
+                  <svg className="w-4 h-4 text-cyan-300 transform group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                   </svg>
                 </MagneticButton>
               </div>
 
-              {/* Secondary Quick Links */}
+              {/* Secondary Quick Links with Neon Highlights */}
               <div className="flex flex-wrap justify-center gap-3 md:gap-5 w-full mt-2">
-                <MagneticButton as="a" href="#pricing" className="footer-glass-pill px-6 py-2.5 rounded-full text-white font-bold text-xs md:text-sm hover:text-cyan-300 border border-white/20 bg-white/10 hover:bg-white/20 transition-colors">
+                <MagneticButton
+                  as="a"
+                  href="#pricing"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                >
                   Pricing Plans
                 </MagneticButton>
-                <MagneticButton as="a" href="#portfolio" className="footer-glass-pill px-6 py-2.5 rounded-full text-white font-bold text-xs md:text-sm hover:text-cyan-300 border border-white/20 bg-white/10 hover:bg-white/20 transition-colors">
+                <MagneticButton
+                  as="a"
+                  href="#portfolio"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                >
                   Portfolio Works
                 </MagneticButton>
-                <MagneticButton as="a" href="#faq" className="footer-glass-pill px-6 py-2.5 rounded-full text-white font-bold text-xs md:text-sm hover:text-cyan-300 border border-white/20 bg-white/10 hover:bg-white/20 transition-colors">
+                <MagneticButton
+                  as="a"
+                  href="#faq"
+                  className="footer-glass-pill px-6 py-2.5 sm:py-3 rounded-full !text-white text-white font-extrabold text-xs md:text-sm border border-cyan-400/50 hover:border-cyan-300 bg-black/60 hover:bg-cyan-950/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.6)] transition-all tracking-wider"
+                >
                   FAQ & Support
                 </MagneticButton>
               </div>

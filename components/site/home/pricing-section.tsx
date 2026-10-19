@@ -61,7 +61,7 @@ export function PricingSection({ onOpenQuote }: PricingSectionProps) {
       <Ripple
         mainCircleSize={300}
         mainCircleOpacity={0.45}
-        numCircles={11}
+        numCircles={isDesktop ? 11 : 4}
         step={125}
         centerTop="38%"
         className="opacity-100 z-0"
@@ -193,27 +193,27 @@ export function PricingSection({ onOpenQuote }: PricingSectionProps) {
                             {plan.name}
                           </p>
                           {plan.discount_percentage ? (
-                            <Badge variant="pink" withDot={false} className="bg-rose-500/25 text-rose-300 border-rose-500/40 font-bold text-[10px]">
+                            <span className="px-2.5 py-1 rounded-full bg-rose-500/30 text-rose-200 border border-rose-400/50 font-extrabold text-[11px] shadow-sm tracking-wide">
                               {plan.discount_percentage}% OFF
-                            </Badge>
+                            </span>
                           ) : null}
                         </div>
                         {plan.tagline && (
-                          <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                          <p className="text-xs text-white/80 leading-relaxed font-normal">
                             {plan.tagline}
                           </p>
                         )}
                       </div>
 
                       {/* NumberFlow Price Box */}
-                      <div className="mt-3 sm:mt-5 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-black/90 border border-neutral-700/80 flex flex-col items-center justify-center">
-                        <div className="flex items-center justify-center gap-x-2">
+                      <div className="mt-3 sm:mt-5 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-black/95 border border-white/20 shadow-inner flex flex-col items-center justify-center">
+                        <div className="flex items-center justify-center gap-x-2.5 sm:gap-x-3">
                           {plan.old_price && (
-                            <span className="text-xs sm:text-xl text-slate-300/80 line-through font-bold">
+                            <span className="text-sm sm:text-2xl !text-white text-white line-through decoration-white/80 decoration-2 font-black tracking-tight drop-shadow-sm select-none">
                               ₹{plan.old_price.toLocaleString("en-IN")}
                             </span>
                           )}
-                          <span className="text-2xl sm:text-5xl font-black tracking-tight text-white">
+                          <span className="text-2xl sm:text-5xl font-black tracking-tight text-white drop-shadow-sm">
                             <NumberFlow
                               value={activePrice}
                               format={{ style: "currency", currency: "INR", maximumFractionDigits: 0 }}
@@ -227,13 +227,13 @@ export function PricingSection({ onOpenQuote }: PricingSectionProps) {
                           </span>
                         </div>
 
-                        <p className="text-[11px] sm:text-xs leading-4 sm:leading-5 text-slate-200 font-medium mt-0.5 sm:mt-1">
+                        <p className="text-xs sm:text-sm leading-5 !text-white text-white font-semibold mt-1">
                           One-time investment (+18% GST)
                         </p>
 
-                        <div className="w-full flex items-center justify-between text-[10px] sm:text-[11px] text-slate-300 pt-1.5 sm:pt-2 mt-1.5 sm:mt-2 border-t border-neutral-800">
-                          <span>Delivery: <strong className="text-white font-bold">{plan.delivery_days} Days</strong></span>
-                          <span>Renewal: <strong className="text-white font-bold">{plan.renewal_price > 0 ? `₹${plan.renewal_price.toLocaleString("en-IN")}` : "N/A"}</strong></span>
+                        <div className="w-full flex items-center justify-between text-[11px] sm:text-xs !text-white text-white pt-2 sm:pt-2.5 mt-2 sm:mt-2.5 border-t border-white/15">
+                          <span>Delivery: <strong className="!text-white text-white font-extrabold">{plan.delivery_days} Days</strong></span>
+                          <span>Renewal: <strong className="!text-white text-white font-extrabold">{plan.renewal_price > 0 ? `₹${plan.renewal_price.toLocaleString("en-IN")}` : "N/A"}</strong></span>
                         </div>
                       </div>
 

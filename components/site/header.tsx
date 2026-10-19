@@ -119,23 +119,23 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300",
           isScrolled || pathname !== "/"
-            ? "h-11 sm:h-12 bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-[0_2px_15px_rgb(0,0,0,0.35)]"
-            : "h-11 sm:h-12 bg-transparent border-b border-transparent shadow-none"
+            ? "h-16 sm:h-20 bg-black/95 backdrop-blur-2xl border-b border-white/10 shadow-[0_4px_25px_rgba(0,0,0,0.6)]"
+            : "h-16 sm:h-20 bg-transparent border-b border-transparent shadow-none"
         )}
       >
-        <div className="max-w-7xl mx-auto h-full px-3 sm:px-6 flex items-center justify-between py-0 sm:py-0.5">
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* 1. Brand Logo: Mobile (Phone) Text-Only vs Desktop Dragon Emblem + Typography */}
-          <Link href="/" className="flex items-center group select-none shrink-0 py-0.5">
+          <Link href="/" className="flex items-center group select-none shrink-0 py-1">
             {/* Mobile (phone): Text-only Logo with comfortable left padding */}
-            <div className="block md:hidden pl-2 sm:pl-0">
+            <div className="block md:hidden pl-1 sm:pl-0">
               <Image
                 src="/images/logo-mobile.png"
                 alt={settings.site_name || "WebSpyra"}
-                width={140}
-                height={87}
+                width={150}
+                height={92}
                 priority
-                className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+                className="h-9 sm:h-10 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
             {/* Desktop / Tablet: Dragon Emblem + Web Spyra Typography */}
@@ -143,10 +143,10 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
               <Image
                 src="/images/logo-desktop.png"
                 alt={settings.site_name || "WebSpyra"}
-                width={200}
-                height={86}
+                width={220}
+                height={95}
                 priority
-                className="h-8 lg:h-9 w-auto object-contain transition-transform group-hover:scale-105"
+                className="h-10 sm:h-11 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
           </Link>
@@ -154,9 +154,9 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
           {/* 2. Apple-Style Dynamic Interactive Dock Navigation (Desktop) */}
           <nav className="hidden lg:flex items-center justify-center">
             <Dock
-              panelHeight={32}
-              magnification={46}
-              distance={75}
+              panelHeight={42}
+              magnification={58}
+              distance={80}
               className="bg-transparent border-0 px-0 py-0 shadow-none"
             >
               {dockNavItems.map((item) => {
@@ -173,11 +173,11 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
                       "aspect-square rounded-full transition-all bg-transparent border-0 shadow-none",
                       isActive
                         ? "text-cyan-400 drop-shadow-[0_0_12px_rgba(6,182,212,0.9)]"
-                        : "text-neutral-300 hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"
+                        : "!text-white/80 text-white hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]"
                     )}
                   >
                     <DockLabel>{item.title}</DockLabel>
-                    <DockIcon>{item.icon}</DockIcon>
+                    <DockIcon className="w-5 h-5">{item.icon}</DockIcon>
                   </DockItem>
                 );
               })}
@@ -185,15 +185,15 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
           </nav>
 
           {/* 3. Right Action Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {/* Mobile Call Us Now Button */}
             <a
               href="tel:+918958889538"
-              className="inline-flex sm:hidden items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-400/40 text-cyan-300 text-[10.5px] font-bold shadow-[0_0_10px_rgba(6,182,212,0.2)] active:scale-95 transition-all select-none"
+              className="inline-flex sm:hidden items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/25 !text-white text-white text-xs font-bold shadow-sm active:scale-95 transition-all select-none"
               aria-label="Call Us Now: +91 89588 89538"
             >
-              <PhoneCall className="w-2.5 h-2.5 text-cyan-400 animate-pulse" />
-              <span>Call Us: +91 89588 89538</span>
+              <PhoneCall className="w-3.5 h-3.5 text-cyan-400 animate-pulse shrink-0" />
+              <span className="!text-white text-white font-bold">Call Us</span>
             </a>
 
             {/* Desktop Search Trigger */}
@@ -201,30 +201,29 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
               type="button"
               onClick={() => setSearchOpen(true)}
               aria-label="Search website"
-              className="hidden sm:flex w-7 h-7 items-center justify-center text-neutral-300 hover:text-cyan-400 transition-all cursor-pointer bg-transparent border-0 shadow-none"
+              className="hidden lg:flex w-9 h-9 rounded-full items-center justify-center text-white hover:text-cyan-400 hover:border-cyan-400/40 transition-all cursor-pointer bg-white/[0.08] border border-white/15 shadow-sm"
             >
-              <Search className="w-3.5 h-3.5" />
+              <Search className="w-4 h-4 text-white" />
             </button>
 
-            {/* Direct Phone Link */}
+            {/* Direct Phone Link (Professional White Text) */}
             <a
               href={`tel:${settings.contact_phone.replace(/\s+/g, "")}`}
-              className="hidden xl:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.04] text-[11px] font-semibold text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/30 transition-colors"
+              className="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-full border border-white/20 bg-white/[0.08] hover:bg-white/15 hover:border-cyan-400/50 !text-white text-white text-xs font-bold transition-all shadow-sm"
             >
-              <PhoneCall className="w-3 h-3 text-cyan-400" />
-              <span>{settings.contact_phone}</span>
+              <PhoneCall className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+              <span className="!text-white text-white font-bold tracking-wide">{settings.contact_phone}</span>
             </a>
 
-            {/* Client Portal Link */}
-            <Link href="/portal" className="hidden sm:inline-flex">
-              <Button
-                variant="ghost"
-                size="sm"
-                leftIcon={<User className="w-3 h-3 text-cyan-400" />}
-                className="h-7 px-2.5 text-[11px] font-semibold text-neutral-300 hover:text-white hover:bg-white/10 border border-white/10"
+            {/* Client Portal Link (Professional White Text) */}
+            <Link href="/portal" className="hidden sm:inline-flex items-center">
+              <button
+                type="button"
+                className="inline-flex items-center gap-2 h-9 px-4 rounded-full border border-white/20 bg-white/[0.08] hover:bg-white/15 hover:border-cyan-400/50 !text-white text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
               >
-                Portal
-              </Button>
+                <User className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span className="!text-white text-white font-bold tracking-wide">Client Portal</span>
+              </button>
             </Link>
 
             {/* Primary Action Button */}
@@ -232,10 +231,10 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
               <button
                 type="button"
                 onClick={handleQuoteClick}
-                className="group px-3 py-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-extrabold text-[10px] tracking-wider uppercase shadow-[0_2px_10px_rgba(6,182,212,0.3)] hover:shadow-[0_4px_16px_rgba(6,182,212,0.45)] transition-all flex items-center gap-1 cursor-pointer"
+                className="group px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-extrabold text-xs sm:text-sm tracking-wider uppercase shadow-[0_2px_15px_rgba(6,182,212,0.35)] hover:shadow-[0_4px_22px_rgba(6,182,212,0.55)] transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span>Free Quote</span>
-                <ArrowRight className="w-2.5 h-2.5 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
               </button>
             </div>
 
@@ -243,9 +242,9 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Navigation Menu"
-              className="lg:hidden w-7 h-7 flex items-center justify-center text-white hover:text-cyan-400 transition-colors cursor-pointer bg-transparent border-0 shadow-none"
+              className="lg:hidden w-9 h-9 rounded-full flex items-center justify-center text-white hover:text-cyan-400 bg-white/10 hover:bg-white/15 border border-white/20 transition-colors cursor-pointer shadow-sm"
             >
-              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4 text-white" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
             </button>
           </div>
         </div>
@@ -327,20 +326,23 @@ export function Header({ onOpenQuoteModal }: HeaderProps) {
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center justify-center gap-6 text-sm text-neutral-200 pt-2 font-medium">
+              <div className="grid grid-cols-2 gap-3 pt-2">
                 <Link
                   href="/portal"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="hover:text-cyan-400 transition-colors"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-white/20 bg-white/10 !text-white text-white font-bold text-xs hover:border-cyan-400 transition-all shadow-sm"
+                  style={{ color: "#ffffff" }}
                 >
-                  Client Portal
+                  <User className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span className="!text-white text-white font-bold" style={{ color: "#ffffff" }}>Client Portal</span>
                 </Link>
-                <span className="text-neutral-400">•</span>
                 <a
                   href={`tel:${settings.contact_phone.replace(/\s+/g, "")}`}
-                  className="hover:text-cyan-400 transition-colors"
+                  className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-white/20 bg-white/10 !text-white text-white font-bold text-xs hover:border-cyan-400 transition-all shadow-sm"
+                  style={{ color: "#ffffff" }}
                 >
-                  {settings.contact_phone}
+                  <PhoneCall className="w-4 h-4 text-cyan-400 shrink-0" />
+                  <span className="!text-white text-white font-bold" style={{ color: "#ffffff" }}>Call Us</span>
                 </a>
               </div>
             </div>
